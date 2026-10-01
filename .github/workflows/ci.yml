@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint-and-import:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Syntax check (no deps needed)
+        run: |
+          python -m compileall -q src examples
+
+      - name: Lint (ruff)
+        run: |
+          pip install ruff
+          ruff check src examples
+
+      - name: Install (CPU torch)
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install transformers numpy
+          pip install -e .
+
+      - name: Import smoke test
+        run: |
+          python -c "import emotion_dial; print('emotion-dial', emotion_dial.__version__)"
+          python -c "from emotion_dial.probe import localize, live_monitor; from emotion_dial.viz import plot_localize, plot_live; print('imports ok')"
+
+      - name: CLI help
+        run: |
+          emotion-dial --help
+          emotion-dial extract --help
+          emotion-dial localize --help

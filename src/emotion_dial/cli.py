@@ -10,12 +10,9 @@
 from __future__ import annotations
 
 import argparse
-import io
 import json
 import os
 import sys
-
-from .emotions import EMOTION_PROMPTS
 
 
 def _add_common(ap):

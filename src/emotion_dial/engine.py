@@ -15,7 +15,7 @@ from __future__ import annotations
 import os
 import sys
 import time
-from typing import Dict, List, Optional, Sequence
+from typing import Dict, Optional, Sequence
 
 os.environ.setdefault("TORCHDYNAMO_DISABLE", "1")
 os.environ.setdefault("TORCH_COMPILE_DISABLE", "1")

@@ -52,11 +52,11 @@ def capture_all_layers(
             [
                 torch.stack(
                     [
-                        hs[l, b, max(0, int(lp[b]) - k + 1): int(lp[b]) + 1].mean(0)
+                        hs[li, b, max(0, int(lp[b]) - k + 1): int(lp[b]) + 1].mean(0)
                         for b in range(hs.shape[1])
                     ]
                 )
-                for l in range(hs.shape[0])
+                for li in range(hs.shape[0])
             ],
             0,
         )
@@ -113,8 +113,8 @@ def localize(
     for gi, g in enumerate(groups):
         D = Diff[gi]  # [L+1, n, H]
         rel_l, uniq_l = [], []
-        for l in range(1, L + 1):
-            V = D[l]
+        for li in range(1, L + 1):
+            V = D[li]
             m = V.mean(0)
             cs = []
             for _ in range(splits):
@@ -132,7 +132,7 @@ def localize(
             for gj in range(len(groups)):
                 if gj == gi:
                     continue
-                mo = Diff[gj][l].mean(0)
+                mo = Diff[gj][li].mean(0)
                 others.append(
                     float(torch.nn.functional.cosine_similarity(u.unsqueeze(0), (mo / (mo.norm() + 1e-9)).unsqueeze(0)))
                 )

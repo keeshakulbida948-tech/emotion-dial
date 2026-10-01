@@ -22,7 +22,7 @@ def main():
     dial = EmotionDial(args.model, layer=args.layer, load_4bit=args.load_4bit)
     res = live_monitor(dial, layer=args.layer, max_new=args.max_new)
 
-    print("情绪轴:", " | ".join(f"PC{k+1}: +{'/'.join(l['pos'])} −{'/'.join(l['neg'])}" for k, l in enumerate(res["pc_labels"])))
+    print("情绪轴:", " | ".join(f"PC{k+1}: +{'/'.join(lb['pos'])} −{'/'.join(lb['neg'])}" for k, lb in enumerate(res["pc_labels"])))
     for s in res["asks"]:
         inten = s["inten"]
         print(f"{s['tag']:<5} 活跃度 均={sum(inten)/max(1,len(inten)):.2f} 峰={max(inten):.2f}")

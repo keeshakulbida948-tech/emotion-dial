@@ -2,7 +2,7 @@
 """emotion_dial.viz —— 可视化（需要 matplotlib）。"""
 from __future__ import annotations
 
-from typing import List, Optional, Sequence
+from typing import List
 
 
 def _plt():
@@ -67,7 +67,7 @@ def plot_live(result: dict, out_path: str, model_name: str = "model"):
     legend = "PC1/PC2/PC3"
     if labels:
         legend = " | ".join(
-            f"PC{k+1}: +{'/'.join(l['pos'])} −{'/'.join(l['neg'])}" for k, l in enumerate(labels)
+            f"PC{k+1}: +{'/'.join(lb['pos'])} −{'/'.join(lb['neg'])}" for k, lb in enumerate(labels)
         )
     for r, s in enumerate(summary):
         x = range(len(s["fl"]))
@@ -93,8 +93,11 @@ def plot_live(result: dict, out_path: str, model_name: str = "model"):
         c.set_ylabel("情绪活跃度", fontsize=8)
         for j in range(3):
             ax[r][j].set_xlabel("生成 token", fontsize=8)
-    fig.suptitle(f"{model_name} · L{P} 层 · 逐 token 内部情绪波动监测（纯读取，不注入）", fontsize=13)
-    fig.tight_layout(rect=[0, 0, 1, 0.98])
+    fig.suptitle(
+        f"{model_name} · L{P} 层 · 逐 token 内部情绪波动监测（纯读取，不注入）\n{legend}",
+        fontsize=12,
+    )
+    fig.tight_layout(rect=[0, 0, 1, 0.94])
     fig.savefig(out_path, dpi=130)
     plt.close(fig)
     return out_path

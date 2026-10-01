@@ -35,3 +35,12 @@ emotion-dial = "emotion_dial.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py39"
+
+[tool.ruff.lint]
+# Explicit, stable rule set (overrides any version-dependent defaults).
+select = ["E", "F", "W"]
+ignore = ["E501"]
